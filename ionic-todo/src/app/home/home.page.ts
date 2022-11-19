@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +15,20 @@ export class HomePage implements OnInit{
   items:any = []
 
   // constructor() {}
-  constructor(public alertController: AlertController) {}
+  constructor(
+    public alertController: AlertController,
+    private toastCtrl: ToastController
+  ) {}
+
+  async presentToast(msg: string) {
+    const toast = await this.toastCtrl.create({
+      message: msg,
+      duration: 1500,
+      position: 'middle'
+    });
+
+    await toast.present();
+  }
 
   async newTask() {
 
@@ -52,19 +66,14 @@ export class HomePage implements OnInit{
       isDone: false
     }
     this.items.unshift(obj)
-    localStorage.setItem('item', JSON.stringify(this.items))
-    this.value = ''
+    localStorage.setItem('items', JSON.stringify(this.items));
+    this.value = '';
   }
 
-  deleteItem(ind: any) {
-    this.items = this.items.filter((c: any, index: any) => index != ind)
-    localStorage.setItem('items', JSON.stringify(this.items))
-  }
-
-  setDone(index: any) {
-    let item = this.items.find((c: any, ind: any) => ind == index)
-    item.isDone = !item.isDone
-    localStorage.setItem('items', JSON.stringify(this.items))
+  setDone(ind: any) {
+    this.items = this.items.filter((c: any, index: any) => index != ind);
+    localStorage.setItem('items', JSON.stringify(this.items));
+    this.presentToast('Tarefa concluida!');
   }
 
 

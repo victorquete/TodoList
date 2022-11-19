@@ -14,7 +14,7 @@
       <ion-list>
         <ion-item [class.done]="item.isDone" *ngFor="let item of items; let ind = index;">
           <ion-label>{{ item.value }}</ion-label>
-          <ion-button (click)="deleteItem(ind)"><ion-icon name="checkmark-outline"></ion-icon></ion-button>
+          <ion-button (click)="setDone(ind)"><ion-icon name="checkmark-outline"></ion-icon></ion-button>
         </ion-item>
       </ion-list>
     </div>
