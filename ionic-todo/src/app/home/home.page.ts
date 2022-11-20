@@ -20,11 +20,22 @@ export class HomePage implements OnInit{
     private toastCtrl: ToastController
   ) {}
 
-  async presentToast(msg: string) {
+  async presentToastNotify(msg: string) {
     const toast = await this.toastCtrl.create({
       message: msg,
       duration: 1500,
       position: 'middle'
+    });
+
+    await toast.present();
+  }
+
+  async presentToastError(msg: string) {
+    const toast = await this.toastCtrl.create({
+      message: msg,
+      duration: 3000,
+      position: 'middle',
+      color: "danger"
     });
 
     await toast.present();
@@ -44,8 +55,13 @@ export class HomePage implements OnInit{
           text: 'Inserir',
           role: 'inserir',
           handler: (data) => {
-            this.value = data.TaskName;
-            this.addItem();
+            console.log(data.TaskName);
+            if(data.TaskName.length == 0) {
+              this.presentToastError('Preencha o nome da tarefa antes de criar uma tarefa.');
+            } else {
+              this.value = data.TaskName;
+              this.addItem();
+            }
           }
         }
       ]
@@ -73,7 +89,7 @@ export class HomePage implements OnInit{
   setDone(ind: any) {
     this.items = this.items.filter((c: any, index: any) => index != ind);
     localStorage.setItem('items', JSON.stringify(this.items));
-    this.presentToast('Tarefa concluida!');
+    this.presentToastNotify('Tarefa concluida!');
   }
 
 
